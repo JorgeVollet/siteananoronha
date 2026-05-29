@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Bash(npm install *)",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\({k:v for k,v in d.get\\('dependencies',{}\\).items\\(\\) if k in ['clsx','tailwind-merge','lucide-react','next','react']}, indent=2\\)\\)\")",
+      "Bash(npx next *)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); deps=d.get\\('dependencies',{}\\); print\\('\\\\n'.join\\(f'{k}: {v}' for k in ['sonner','lucide-react','clsx','tailwind-merge'] if \\(v := deps.get\\(k\\)\\)\\)\\)\")",
+      "Bash(python3 -c ' *)",
+      "Bash(node -e \"const d=require\\('./package.json'\\); ['sonner','lucide-react','clsx','tailwind-merge','@supabase/ssr'].forEach\\(k => console.log\\(k+':', d.dependencies[k] || 'NOT INSTALLED'\\)\\)\")",
+      "Bash(Get-ChildItem -Path \"E:\\\\DESENVOLVIMENTO DE SITES\\\\SITE ANA LAURA NORONHA\\\\SITE NOVO ANA LAURA\" -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Sort-Object)",
+      "Bash(Get-ChildItem -Path \"E:\\\\DESENVOLVIMENTO DE SITES\\\\SITE ANA LAURA NORONHA\\\\SITE NOVO ANA LAURA\" -Directory)",
+      "Bash(Select-Object Name)",
+      "Bash(dir components *)",
+      "Bash(dir app *)",
+      "Bash(grep -rn \"Pilares\\\\|PilaresSection\" components/ -l)",
+      "Bash(grep -rn \"Passo a Passo\\\\|PassosSection\\\\|Briefing\\\\|Levantamento Técnico\" components/ -l)",
+      "Bash(grep -rn \"Cada etapa pensada\\\\|Saiba mais\" components/ -l)",
+      "Bash(grep -rn \"ENGENHARIA.*ARQUITETURA\\\\|ARQUITETURA.*MARCENARIA\" components/ -l)",
+      "Bash(grep -rn 'id=\"sobre\"' components/ -l)"
+    ]
+  }
+}
