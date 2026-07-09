@@ -13,7 +13,7 @@ import { trackCtaClick } from '@/lib/track-cta';
 type Props = {
   whatsapp?: string;
   email?: string;
-  instagram?: string;   // full URL (ex: https://instagram.com/analauraarquitetura)
+  instagram?: string;   // full URL (ex: https://instagram.com/im.analaura)
   cidade?: string;
   crea?: string;
 };
@@ -89,8 +89,12 @@ export default function Footer({ whatsapp, email, instagram, cidade, crea }: Pro
                 <span className="leading-relaxed">
                   {siteConfig.contact.address.street}
                   <br />
-                  {siteConfig.contact.address.complement}
-                  <br />
+                  {siteConfig.contact.address.complement && (
+                    <>
+                      {siteConfig.contact.address.complement}
+                      <br />
+                    </>
+                  )}
                   {cidadeStr}
                 </span>
               </li>

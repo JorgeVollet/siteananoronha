@@ -45,24 +45,25 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://analauraarquitetura.com.br'),
+  metadataBase: new URL('https://siteananoronha.vercel.app'),
   title: 'Ana Laura Noronha — Engenharia e Interiores',
   description:
-    'Projetos de engenharia e interiores completos, pensados para que cada detalhe faça sentido. Arquitetura e engenharia sob uma nova luz — atendimento na Barra da Tijuca e projetos 100% online.',
+    'Projetos de engenharia e interiores completos, pensados para que cada detalhe faça sentido. Método integrado sob uma nova luz — atendimento em Horizontina, RS, e projetos 100% online.',
   keywords: [
     'projeto arquitetônico',
     'design de interiores',
     'engenharia civil',
     'móveis sob medida',
-    'Barra da Tijuca',
-    'Rio de Janeiro',
+    'marcenaria sob medida',
+    'Horizontina',
+    'Rio Grande do Sul',
     'Ana Laura Noronha'
   ],
   authors: [{ name: 'Ana Laura Noronha' }],
   openGraph: {
     title: 'Ana Laura Noronha — Engenharia e Interiores',
-    description: 'Arquitetura e engenharia sob uma nova luz.',
-    url: 'https://analauraarquitetura.com.br',
+    description: 'Engenharia e interiores sob uma nova luz.',
+    url: 'https://siteananoronha.vercel.app',
     siteName: 'Ana Laura Noronha',
     locale: 'pt_BR',
     type: 'website'

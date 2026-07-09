@@ -100,7 +100,7 @@ git push -u origin main
 
 ## Próximos passos sugeridos
 
-- [ ] Conectar **Resend** com domínio verificado (`analauraarquitetura.com.br`)
+- [ ] Conectar **Resend** com domínio verificado (a definir — usar `resend.dev` até lá)
 - [ ] Substituir as 9 imagens placeholder do Antes/Depois pelas fotos reais dos projetos
 - [ ] Adicionar **Google Analytics 4** ou **Plausible** para tracking
 - [ ] Habilitar **Vercel Analytics** + **Speed Insights**

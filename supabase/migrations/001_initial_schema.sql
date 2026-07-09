@@ -138,10 +138,10 @@ insert into public.site_content (section, key, value_text) values
   ('sobre',    'imagem',           '/img/9.png'),
   ('servicos', 'subtitulo',        'Da concepção arquitetônica ao último detalhe da marcenaria, um método integrado.'),
   ('servicos', 'imagem_ana',       '/img/9.png'),
-  ('footer',   'whatsapp',         '5521996621363'),
-  ('footer',   'email',            'contato@analauraarquitetura.com.br'),
-  ('footer',   'instagram',        'https://instagram.com/analauraarquitetura'),
-  ('footer',   'cidade',           'Barra da Tijuca, RJ'),
+  ('footer',   'whatsapp',         '5555999942637'),
+  ('footer',   'email',            'analauramcb@hotmail.com'),
+  ('footer',   'instagram',        'https://instagram.com/im.analaura'),
+  ('footer',   'cidade',           'Horizontina, RS'),
   ('footer',   'crea',             'CREA-RS 222362.2305')
 on conflict (section, key) do update
   set value_text = excluded.value_text;

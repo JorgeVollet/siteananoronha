@@ -101,7 +101,7 @@ type Props = {
 };
 
 export default function Servicos({ subtitulo, imagemAna, whatsapp }: Props) {
-  const phoneRaw = whatsapp ?? '5521996621363';
+  const phoneRaw = whatsapp ?? '5555999942637';
   const whatsappUrl = `https://wa.me/${phoneRaw}?text=${encodeURIComponent('Olá Ana, gostaria de conversar sobre um projeto.')}`;
 
   const sectionRef = useRevealOnScroll();

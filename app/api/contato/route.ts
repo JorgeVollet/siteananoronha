@@ -6,7 +6,7 @@ import { Resend } from 'resend';
  * Recebe um lead do formulário de orçamento, valida e envia por email
  * usando Resend. Variáveis de ambiente:
  *   - RESEND_API_KEY          (obrigatória — pegar em https://resend.com)
- *   - CONTACT_EMAIL_TO        (destino — ex: contato@analauraarquitetura.com.br)
+ *   - CONTACT_EMAIL_TO        (destino — ex: analauramcb@hotmail.com)
  *   - CONTACT_EMAIL_FROM      (remetente — precisa ser de domínio verificado no Resend)
  */
 export async function POST(req: Request) {
@@ -19,8 +19,8 @@ export async function POST(req: Request) {
     }
 
     const apiKey = process.env.RESEND_API_KEY;
-    const to = process.env.CONTACT_EMAIL_TO ?? 'contato@analauraarquitetura.com.br';
-    const from = process.env.CONTACT_EMAIL_FROM ?? 'Site Ana Laura <orcamento@analauraarquitetura.com.br>';
+    const to = process.env.CONTACT_EMAIL_TO ?? 'analauramcb@hotmail.com';
+    const from = process.env.CONTACT_EMAIL_FROM ?? 'Site Ana Laura <orcamento@resend.dev>';
 
     // Se Resend não estiver configurado, devolve OK para não bloquear UX em dev.
     if (!apiKey) {
@@ -105,7 +105,7 @@ function renderEmail(d: {
             <div style="font-family: Georgia, serif; color:#D3C39D; font-size: 22px; letter-spacing: 2px; font-weight: 700; text-transform: uppercase;">
               Novo Pedido de Orçamento
             </div>
-            <div style="color:#fff; font-size:13px; margin-top:6px; opacity:.7;">via site analauraarquitetura.com.br</div>
+            <div style="color:#fff; font-size:13px; margin-top:6px; opacity:.7;">via site siteananoronha.vercel.app</div>
           </td>
         </tr>
         <tr>

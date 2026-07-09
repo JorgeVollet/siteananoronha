@@ -20,7 +20,7 @@ export async function HeroSection() {
       }
       imagemPrincipal={hero.imagem_principal ?? '/img/1.png'}
       ctaTexto={hero.cta_texto ?? 'Solicitar Orçamento'}
-      whatsapp={footer.whatsapp ?? '5521996621363'}
+      whatsapp={footer.whatsapp ?? '5555999942637'}
     />
   );
 }

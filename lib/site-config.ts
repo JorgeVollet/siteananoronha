@@ -6,18 +6,18 @@
 export const siteConfig = {
   name: 'Ana Laura Noronha',
   tagline: 'Engenharia e Interiores',
-  url: 'https://analauraarquitetura.com.br',
+  url: 'https://siteananoronha.vercel.app',
 
   contact: {
-    phone: '(21) 9 9662-1363',
-    phoneRaw: '5521996621363',
-    email: 'contato@analauraarquitetura.com.br',
-    instagram: '@analauraarquitetura',
-    instagramUrl: 'https://instagram.com/analauraarquitetura',
+    phone: '(55) 9 9994-2637',
+    phoneRaw: '5555999942637',
+    email: 'analauramcb@hotmail.com',
+    instagram: '@im.analaura',
+    instagramUrl: 'https://instagram.com/im.analaura',
     address: {
-      street: 'Av. Embaixador Abelardo Bueno, 01',
-      complement: 'Dimension Office & Park',
-      city: 'Barra da Tijuca - RJ'
+      street: 'Rua Santa Cruz, 376',
+      complement: '',
+      city: 'Horizontina - RS'
     },
     crea: 'CREA-RS 222362.2305'
   },
@@ -147,7 +147,7 @@ export const siteConfig = {
     },
     {
       q: 'Atendem apenas presencial ou também online?',
-      a: 'Atendemos presencialmente na Barra da Tijuca, RJ, e também possuímos metodologia exclusiva para projetos 100% online — com reuniões por vídeo, levantamento remoto orientado e entregas digitais.'
+      a: 'Atendemos presencialmente em Horizontina, RS, e também possuímos metodologia exclusiva para projetos 100% online — com reuniões por vídeo, levantamento remoto orientado e entregas digitais.'
     },
     {
       q: 'Como funciona a primeira reunião de briefing?',
