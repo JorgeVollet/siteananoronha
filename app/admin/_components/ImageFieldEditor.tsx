@@ -9,9 +9,18 @@ type Props = {
   value: string;
   onChange: (url: string) => void;
   disabled?: boolean;
+  pathPrefix?: string;
+  hint?: string;
 };
 
-export function ImageFieldEditor({ label, value, onChange, disabled }: Props) {
+export function ImageFieldEditor({
+  label,
+  value,
+  onChange,
+  disabled,
+  pathPrefix = 'content',
+  hint,
+}: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -19,7 +28,7 @@ export function ImageFieldEditor({ label, value, onChange, disabled }: Props) {
   async function handleFile(file: File) {
     setError(null);
     setUploading(true);
-    const result = await uploadToBucket('site-images', file, 'content');
+    const result = await uploadToBucket('site-images', file, pathPrefix);
     setUploading(false);
     if ('error' in result) {
       setError(result.error);
@@ -66,6 +75,9 @@ export function ImageFieldEditor({ label, value, onChange, disabled }: Props) {
           )}
         </button>
       </div>
+      {hint && !error && (
+        <p className="text-[0.72rem] leading-[1.5] text-[#756b60]">{hint}</p>
+      )}
       {error && <p className="text-[0.78rem] text-red-500">{error}</p>}
       <input
         ref={inputRef}

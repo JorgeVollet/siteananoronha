@@ -1,9 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { trackCtaClick } from '@/lib/track-cta';
-import { HeroHeader } from './HeroHeader';
 
 type Props = {
   titulo: string;
@@ -41,15 +39,6 @@ export function HeroClient({
   ctaTexto,
   whatsapp,
 }: Props) {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
   const message = encodeURIComponent(
     'Olá Ana, gostaria de solicitar um orçamento para meu projeto.',
   );
@@ -57,8 +46,6 @@ export function HeroClient({
 
   return (
     <>
-      <HeroHeader scrolled={scrolled} whatsapp={whatsapp} ctaTexto={ctaTexto} />
-
       <section
         id="home"
         style={{
@@ -87,7 +74,7 @@ export function HeroClient({
               position: 'absolute',
               inset: 0,
               background: `
-                linear-gradient(105deg, rgba(23,20,17,0.60) 0%, rgba(23,20,17,0.28) 45%, transparent 72%),
+                linear-gradient(95deg, rgba(23,20,17,0.85) 0%, rgba(23,20,17,0.65) 25%, rgba(23,20,17,0.35) 50%, transparent 78%),
                 linear-gradient(180deg, transparent 0%, transparent 55%, rgba(23,20,17,0.50) 100%),
                 radial-gradient(circle at 18% 80%, rgba(166,123,79,0.20), transparent 52%)
               `,

@@ -49,21 +49,22 @@ Combinando criatividade, inovação e técnica, sinto-me à vontade para criar e
         }}
       />
 
-      {/* Overlay editorial — mais escuro na esquerda onde fica o card */}
+      {/* Overlay editorial — escurece as bordas, deixa o centro aberto para a foto */}
       <div
         aria-hidden="true"
         style={{
           position: 'absolute',
           inset: 0,
           background: `
-            linear-gradient(105deg, rgba(17,13,10,0.82) 0%, rgba(17,13,10,0.55) 42%, rgba(17,13,10,0.12) 72%, transparent 100%),
+            linear-gradient(90deg, rgba(17,13,10,0.75) 0%, rgba(17,13,10,0.30) 22%, rgba(17,13,10,0.08) 40%, rgba(17,13,10,0.08) 60%, rgba(17,13,10,0.30) 78%, rgba(17,13,10,0.75) 100%),
             linear-gradient(180deg, transparent 60%, rgba(17,13,10,0.40) 100%)
           `,
         }}
       />
 
-      {/* Card flutuante editorial */}
+      {/* Container: dois cards flutuantes espelhados (esquerda + direita) */}
       <div
+        className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10"
         style={{
           position: 'relative',
           zIndex: 10,
@@ -73,15 +74,18 @@ Combinando criatividade, inovação e técnica, sinto-me à vontade para criar e
           padding: 'clamp(64px,10vh,120px) clamp(24px,4vw,56px)',
         }}
       >
+        {/* ══ CARD ESQUERDO — Identidade ══ */}
         <div
+          className="lg:translate-x-[30px] lg:-translate-y-[20px]"
           style={{
-            maxWidth: '560px',
+            width: '100%',
+            maxWidth: '460px',
             background: 'rgba(245,240,233,0.07)',
             border: '1px solid rgba(215,196,175,0.22)',
             borderRadius: '1.5rem',
             backdropFilter: 'blur(18px)',
             WebkitBackdropFilter: 'blur(18px)',
-            padding: 'clamp(32px,5vw,56px)',
+            padding: 'clamp(32px,4vw,48px)',
             boxShadow: '0 40px 100px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.10)',
           }}
         >
@@ -118,11 +122,20 @@ Combinando criatividade, inovação e técnica, sinto-me à vontade para criar e
               lineHeight: 0.95,
               letterSpacing: '-0.055em',
               color: '#ffffff',
-              margin: '0 0 12px',
+              margin: '0 0 20px',
             }}
           >
             {titulo}
           </h2>
+
+          {/* Separador */}
+          <div
+            style={{
+              height: '1px',
+              background: 'linear-gradient(90deg, rgba(202,165,124,0.50), transparent)',
+              marginBottom: '20px',
+            }}
+          />
 
           {/* Subtítulo */}
           <p
@@ -134,21 +147,28 @@ Combinando criatividade, inovação e técnica, sinto-me à vontade para criar e
               lineHeight: 1.2,
               letterSpacing: '-0.025em',
               color: '#caa57c',
-              margin: '0 0 28px',
+              margin: 0,
             }}
           >
             {subtitulo}
           </p>
+        </div>
 
-          {/* Separador */}
-          <div
-            style={{
-              height: '1px',
-              background: 'linear-gradient(90deg, rgba(202,165,124,0.50), transparent)',
-              marginBottom: '28px',
-            }}
-          />
-
+        {/* ══ CARD DIREITO — Biografia ══ */}
+        <div
+          className="lg:translate-x-[60px] lg:translate-y-[30px]"
+          style={{
+            width: '100%',
+            maxWidth: '460px',
+            background: 'rgba(245,240,233,0.07)',
+            border: '1px solid rgba(215,196,175,0.22)',
+            borderRadius: '1.5rem',
+            backdropFilter: 'blur(18px)',
+            WebkitBackdropFilter: 'blur(18px)',
+            padding: 'clamp(32px,4vw,48px)',
+            boxShadow: '0 40px 100px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.10)',
+          }}
+        >
           {/* Parágrafos do corpo */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {paragrafos.map((p, i) => (
@@ -169,10 +189,18 @@ Combinando criatividade, inovação e técnica, sinto-me à vontade para criar e
             ))}
           </div>
 
+          {/* Separador */}
+          <div
+            style={{
+              height: '1px',
+              background: 'linear-gradient(90deg, rgba(202,165,124,0.50), transparent)',
+              margin: '32px 0 24px',
+            }}
+          />
+
           {/* Assinatura */}
           <div
             style={{
-              marginTop: '36px',
               display: 'flex',
               alignItems: 'center',
               gap: '16px',

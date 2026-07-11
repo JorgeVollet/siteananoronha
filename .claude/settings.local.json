@@ -19,7 +19,12 @@
       "Bash(grep -rn \"Passo a Passo\\\\|PassosSection\\\\|Briefing\\\\|Levantamento Técnico\" components/ -l)",
       "Bash(grep -rn \"Cada etapa pensada\\\\|Saiba mais\" components/ -l)",
       "Bash(grep -rn \"ENGENHARIA.*ARQUITETURA\\\\|ARQUITETURA.*MARCENARIA\" components/ -l)",
-      "Bash(grep -rn 'id=\"sobre\"' components/ -l)"
+      "Bash(grep -rn 'id=\"sobre\"' components/ -l)",
+      "Bash(echo \"EXIT_CODE: $?\")",
+      "Bash(npm run *)",
+      "Bash(find app/blog app/curiosidades app/normas-tecnicas app/brainstorming-sketch -type f)",
+      "Bash(find components/articles -type f)",
+      "Bash(find components/navigation -type f)"
     ]
   }
 }

@@ -5,6 +5,9 @@ import SmoothScroll from '@/components/SmoothScroll';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Toaster } from 'sonner';
+import { PersonJsonLd } from '@/components/seo/PersonJsonLd';
+import { OrganizationJsonLd } from '@/components/seo/OrganizationJsonLd';
+import { SiteHeader } from '@/components/site/SiteHeader';
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -45,7 +48,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://siteananoronha.vercel.app'),
+  metadataBase: new URL('https://www.ananoronha.eng'),
   title: 'Ana Laura Noronha — Engenharia e Interiores',
   description:
     'Projetos de engenharia e interiores completos, pensados para que cada detalhe faça sentido. Método integrado sob uma nova luz — atendimento em Horizontina, RS, e projetos 100% online.',
@@ -63,7 +66,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Ana Laura Noronha — Engenharia e Interiores',
     description: 'Engenharia e interiores sob uma nova luz.',
-    url: 'https://siteananoronha.vercel.app',
+    url: 'https://www.ananoronha.eng',
     siteName: 'Ana Laura Noronha',
     locale: 'pt_BR',
     type: 'website'
@@ -81,6 +84,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${playfair.variable} ${jakarta.variable} ${cormorant.variable} ${newsreader.variable} ${manrope.variable}`}
     >
       <body className="bg-bg-nude text-text-dark font-sans antialiased">
+        <PersonJsonLd />
+        <OrganizationJsonLd />
+        <SiteHeader />
         <SmoothScroll>{children}</SmoothScroll>
         <Toaster position="bottom-right" richColors />
         <Analytics />

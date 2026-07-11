@@ -3,6 +3,7 @@ import { HeroSection } from '@/components/sections/HeroSection';
 import { SobreSection } from '@/components/sections/SobreSection';
 import { PilaresSection } from '@/components/sections/PilaresSection';
 import { PassosSection } from '@/components/sections/PassosSection';
+import { BlogPreviewSection } from '@/components/sections/BlogPreviewSection';
 import FilosofiaManifesto from '@/components/FilosofiaManifesto';
 import Servicos from '@/components/Servicos';
 import AntesDepois from '@/components/AntesDepois';
@@ -49,6 +50,9 @@ export default async function HomePage() {
 
       {/* Portfólio — id="portfolio" */}
       <AntesDepois />
+
+      {/* Blog / Conteúdo editorial — id="conteudo" */}
+      <BlogPreviewSection />
 
       <FAQ />
       <Orcamento />

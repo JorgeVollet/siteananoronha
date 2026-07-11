@@ -156,6 +156,78 @@ export type Database = {
         };
         Relationships: [];
       };
+      articles: {
+        Row: {
+          id: string;
+          slug: string;
+          category: 'blog' | 'normas' | 'curiosidades' | 'sketch';
+          title: string;
+          subtitle: string | null;
+          excerpt: string | null;
+          content: Json | null;
+          cover_image: string | null;
+          cover_alt: string | null;
+          tags: string[];
+          author: string | null;
+          reading_time_minutes: number | null;
+          seo_meta_description: string | null;
+          seo_keywords: string[] | null;
+          is_published: boolean;
+          is_featured: boolean;
+          published_at: string | null;
+          views: number;
+          created_at: string;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          id?: string;
+          slug: string;
+          category: 'blog' | 'normas' | 'curiosidades' | 'sketch';
+          title: string;
+          subtitle?: string | null;
+          excerpt?: string | null;
+          content?: Json | null;
+          cover_image?: string | null;
+          cover_alt?: string | null;
+          tags?: string[];
+          author?: string | null;
+          reading_time_minutes?: number | null;
+          seo_meta_description?: string | null;
+          seo_keywords?: string[] | null;
+          is_published?: boolean;
+          is_featured?: boolean;
+          published_at?: string | null;
+          views?: number;
+          created_at?: string;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          id?: string;
+          slug?: string;
+          category?: 'blog' | 'normas' | 'curiosidades' | 'sketch';
+          title?: string;
+          subtitle?: string | null;
+          excerpt?: string | null;
+          content?: Json | null;
+          cover_image?: string | null;
+          cover_alt?: string | null;
+          tags?: string[];
+          author?: string | null;
+          reading_time_minutes?: number | null;
+          seo_meta_description?: string | null;
+          seo_keywords?: string[] | null;
+          is_published?: boolean;
+          is_featured?: boolean;
+          published_at?: string | null;
+          views?: number;
+          created_at?: string;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -186,3 +258,8 @@ export type SiteContent =
 
 export type CtaClick =
   Database['public']['Tables']['cta_clicks']['Row'];
+
+export type Article =
+  Database['public']['Tables']['articles']['Row'];
+
+export type ArticleCategory = 'blog' | 'normas' | 'curiosidades' | 'sketch';

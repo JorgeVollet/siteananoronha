@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   Briefcase,
   FileText,
+  Newspaper,
   Phone,
   LogOut,
   Menu,
@@ -19,6 +20,7 @@ import { cn } from '@/lib/utils';
 const menuItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/portfolio', label: 'Portfólio', icon: Briefcase },
+  { href: '/admin/artigos', label: 'Artigos', icon: Newspaper },
   { href: '/admin/conteudo', label: 'Conteúdo', icon: FileText },
   { href: '/admin/footer', label: 'Footer & Contato', icon: Phone },
 ];

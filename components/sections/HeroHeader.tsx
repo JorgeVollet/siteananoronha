@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Menu, X, ArrowRight } from 'lucide-react';
+import { ContentDropdown, MobileContentAccordion } from '@/components/navigation/ContentDropdown';
 
 const menuItems = [
   { label: 'Manifesto', href: '#manifesto' },
@@ -76,26 +77,51 @@ export function HeroHeader({ scrolled, whatsapp, ctaTexto }: Props) {
             style={{ display: 'flex', alignItems: 'center', gap: '20px' }}
             className="hidden lg:flex"
           >
-            {menuItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className={item.hideAtLg ? 'hidden xl:inline' : undefined}
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontWeight: 700,
-                  fontSize: '0.88rem',
-                  letterSpacing: '-0.01em',
-                  color: scrolled ? '#3a332d' : 'rgba(255,255,255,0.90)',
-                  textDecoration: 'none',
-                  transition: 'color 0.3s',
-                }}
-                onMouseEnter={(e) => { (e.target as HTMLElement).style.color = '#a67b4f'; }}
-                onMouseLeave={(e) => { (e.target as HTMLElement).style.color = scrolled ? '#3a332d' : 'rgba(255,255,255,0.90)'; }}
-              >
-                {item.label}
-              </a>
-            ))}
+            {menuItems.map((item) => {
+              if (item.label === 'Portfólio') {
+                return (
+                  <div key={item.href} style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                    <a
+                      href={item.href}
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontWeight: 700,
+                        fontSize: '0.88rem',
+                        letterSpacing: '-0.01em',
+                        color: scrolled ? '#3a332d' : 'rgba(255,255,255,0.90)',
+                        textDecoration: 'none',
+                        transition: 'color 0.3s',
+                      }}
+                      onMouseEnter={(e) => { (e.target as HTMLElement).style.color = '#a67b4f'; }}
+                      onMouseLeave={(e) => { (e.target as HTMLElement).style.color = scrolled ? '#3a332d' : 'rgba(255,255,255,0.90)'; }}
+                    >
+                      {item.label}
+                    </a>
+                    <ContentDropdown scrolled={scrolled} />
+                  </div>
+                );
+              }
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className={item.hideAtLg ? 'hidden xl:inline' : undefined}
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 700,
+                    fontSize: '0.88rem',
+                    letterSpacing: '-0.01em',
+                    color: scrolled ? '#3a332d' : 'rgba(255,255,255,0.90)',
+                    textDecoration: 'none',
+                    transition: 'color 0.3s',
+                  }}
+                  onMouseEnter={(e) => { (e.target as HTMLElement).style.color = '#a67b4f'; }}
+                  onMouseLeave={(e) => { (e.target as HTMLElement).style.color = scrolled ? '#3a332d' : 'rgba(255,255,255,0.90)'; }}
+                >
+                  {item.label}
+                </a>
+              );
+            })}
           </nav>
 
           {/* Right: CTA + hamburger */}
@@ -167,21 +193,28 @@ export function HeroHeader({ scrolled, whatsapp, ctaTexto }: Props) {
         <div style={{ padding: '24px' }}>
           <nav style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {menuItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                onClick={() => setIsMenuOpen(false)}
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontWeight: 700,
-                  fontSize: '1rem',
-                  color: '#171411',
-                  letterSpacing: '-0.01em',
-                  textDecoration: 'none',
-                }}
-              >
-                {item.label}
-              </a>
+              <div key={item.href}>
+                <a
+                  href={item.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 700,
+                    fontSize: '1rem',
+                    color: '#171411',
+                    letterSpacing: '-0.01em',
+                    textDecoration: 'none',
+                    display: 'block',
+                  }}
+                >
+                  {item.label}
+                </a>
+                {item.label === 'Portfólio' && (
+                  <div style={{ marginTop: '20px' }}>
+                    <MobileContentAccordion onNavigate={() => setIsMenuOpen(false)} />
+                  </div>
+                )}
+              </div>
             ))}
           </nav>
 

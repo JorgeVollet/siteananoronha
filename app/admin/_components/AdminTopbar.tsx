@@ -6,6 +6,8 @@ const titles: Record<string, string> = {
   '/admin': 'Dashboard',
   '/admin/portfolio': 'Portfólio',
   '/admin/portfolio/novo': 'Novo projeto',
+  '/admin/artigos': 'Artigos',
+  '/admin/artigos/novo': 'Novo artigo',
   '/admin/conteudo': 'Conteúdo do site',
   '/admin/footer': 'Footer & Contato',
 };
@@ -14,6 +16,9 @@ function getTitle(pathname: string): string {
   if (titles[pathname]) return titles[pathname];
   if (pathname.startsWith('/admin/portfolio/') && pathname !== '/admin/portfolio/novo') {
     return 'Editar projeto';
+  }
+  if (pathname.startsWith('/admin/artigos/') && pathname !== '/admin/artigos/novo') {
+    return 'Editar artigo';
   }
   return 'Admin';
 }

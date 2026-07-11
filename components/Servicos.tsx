@@ -19,6 +19,7 @@ import type { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useRevealOnScroll } from '@/lib/useRevealOnScroll';
 import { trackCtaClick } from '@/lib/track-cta';
+import { siteConfig } from '@/lib/site-config';
 
 // ---------------------------------------------------------------------------
 // Analytics stub — integra com gtag se disponível, loga em dev
@@ -44,6 +45,7 @@ interface ServiceItem {
   id: string;
   title: string;
   body: string;
+  image: string;
 }
 
 const SERVICES: ServiceItem[] = [
@@ -53,6 +55,7 @@ const SERVICES: ServiceItem[] = [
     id: 'arquitetonico',
     title: 'Projeto Arquitetônico',
     body: 'Concepção e detalhamento de estruturas que unem funcionalidade, estética e sustentabilidade, criando espaços que refletem sua identidade com precisão técnica e autoral. O ponto de partida para o seu sonho.',
+    image: '/servicos/1.jpg',
   },
   {
     n: '02',
@@ -60,6 +63,7 @@ const SERVICES: ServiceItem[] = [
     id: 'interiores',
     title: 'Design de Interiores',
     body: 'Execução de projetos residenciais e corporativos de alto padrão, harmonizando cada detalhe para uma experiência espacial única e atemporal. Da planta ao toque final.',
+    image: '/servicos/2.jpg',
   },
   {
     n: '03',
@@ -67,6 +71,7 @@ const SERVICES: ServiceItem[] = [
     id: 'consultoria-tecnica',
     title: 'Consultoria Técnica',
     body: 'Avaliação detalhada de normas, sistemas construtivos e integração de sistemas (como automação), oferecendo suporte para escolhas inteligentes e preventivas durante todo o processo — com precisão em metragens, viabilidade, segurança e economia.',
+    image: '/servicos/3.jpg',
   },
   {
     n: '04',
@@ -74,6 +79,7 @@ const SERVICES: ServiceItem[] = [
     id: 'gestao-obra',
     title: 'Gestão de Obra',
     body: 'Acompanhamento rigoroso de cronogramas, fornecedores e orçamentos, assegurando a fidelidade ao projeto original e minimizando imprevistos para uma entrega impecável, sem estresse para você.',
+    image: '/servicos/4.jpg',
   },
   {
     n: '05',
@@ -81,6 +87,7 @@ const SERVICES: ServiceItem[] = [
     id: 'marcenaria',
     title: 'Marcenaria Sob Medida',
     body: 'Móveis planejados com acabamento autoral, integrados ao projeto arquitetônico desde a primeira linha. Cada peça desenhada para conversar com o espaço e com o cliente — nada genérico, nada improvisado.',
+    image: '/servicos/5.jpg',
   },
   {
     n: '06',
@@ -88,6 +95,7 @@ const SERVICES: ServiceItem[] = [
     id: 'materiais',
     title: 'Consultoria de Materiais',
     body: 'Análise estratégica e técnica de espaços e materiais, garantindo soluções otimizadas, precisão em metragens e viabilidade para cada etapa do seu projeto, com foco em segurança e economia.',
+    image: '/servicos/6.jpg',
   },
 ];
 
@@ -96,12 +104,12 @@ const SERVICES: ServiceItem[] = [
 // ---------------------------------------------------------------------------
 type Props = {
   subtitulo?: string;
-  imagemAna?: string;
+  imagemAna?: string; // legado — ignorado após dinamização de imagens por serviço
   whatsapp?: string;
 };
 
-export default function Servicos({ subtitulo, imagemAna, whatsapp }: Props) {
-  const phoneRaw = whatsapp ?? '5555999942637';
+export default function Servicos({ subtitulo, whatsapp }: Props) {
+  const phoneRaw = whatsapp ?? siteConfig.contact.phoneRaw;
   const whatsappUrl = `https://wa.me/${phoneRaw}?text=${encodeURIComponent('Olá Ana, gostaria de conversar sobre um projeto.')}`;
 
   const sectionRef = useRevealOnScroll();
@@ -116,38 +124,77 @@ export default function Servicos({ subtitulo, imagemAna, whatsapp }: Props) {
     containScroll: 'trimSnaps',
   });
 
+  // selectedIndex agora refere-se ao CARD ativo (0..SERVICES.length-1),
+  // não ao snap do Embla. Quando um snap mostra 2 cards (desktop),
+  // o card ativo pode ser um dos 2 visíveis — e a seta next sempre
+  // avança para o próximo card, mesmo que Embla não role viewport.
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [canScrollNext, setCanScrollNext] = useState(true);
 
-  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
-  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
-  const scrollTo = useCallback((i: number) => emblaApi?.scrollTo(i), [emblaApi]);
+  const canScrollPrev = selectedIndex > 0;
+  const canScrollNext = selectedIndex < SERVICES.length - 1;
 
-  // Sincronizar estado com Embla
+  // Move para um card específico ajustando o Embla se necessário
+  const goToCard = useCallback(
+    (cardIdx: number, direction: 'prev' | 'next' | 'dot' = 'dot') => {
+      const clamped = Math.max(0, Math.min(cardIdx, SERVICES.length - 1));
+      const prev = prevIndexRef.current;
+
+      setSelectedIndex(clamped);
+
+      if (emblaApi) {
+        const snapsList = emblaApi.scrollSnapList();
+        const maxSnap = Math.max(0, snapsList.length - 1);
+        const targetSnap = Math.min(clamped, maxSnap);
+        if (emblaApi.selectedScrollSnap() !== targetSnap) {
+          emblaApi.scrollTo(targetSnap);
+        }
+      }
+
+      if (clamped !== prev) {
+        trackEvent('services_carousel_navigate', {
+          direction,
+          from_index: prev,
+          to_index: clamped,
+        });
+        prevIndexRef.current = clamped;
+      }
+    },
+    [emblaApi],
+  );
+
+  const scrollPrev = useCallback(() => goToCard(selectedIndex - 1, 'prev'), [selectedIndex, goToCard]);
+  const scrollNext = useCallback(() => goToCard(selectedIndex + 1, 'next'), [selectedIndex, goToCard]);
+  const scrollTo = useCallback((i: number) => goToCard(i, 'dot'), [goToCard]);
+
+  // Sincronizar quando o usuário arrasta o Embla manualmente
   useEffect(() => {
     if (!emblaApi) return;
 
     const onSelect = () => {
-      const current = emblaApi.selectedScrollSnap();
-      const prev = prevIndexRef.current;
+      const snap = emblaApi.selectedScrollSnap();
+      const snapsCount = emblaApi.scrollSnapList().length;
+      const cardsPerView = Math.max(1, SERVICES.length - snapsCount + 1);
+      const firstVisible = snap;
+      const lastVisible = Math.min(snap + cardsPerView - 1, SERVICES.length - 1);
 
-      setSelectedIndex(current);
-      setCanScrollPrev(emblaApi.canScrollPrev());
-      setCanScrollNext(emblaApi.canScrollNext());
-
-      if (current !== prev) {
-        trackEvent('services_carousel_navigate', {
-          direction: current > prev ? 'next' : 'prev',
-          from_index: prev,
-          to_index: current,
-        });
-        prevIndexRef.current = current;
-      }
+      setSelectedIndex((current) => {
+        // Se card ativo já está entre os visíveis desse snap, mantém
+        if (current >= firstVisible && current <= lastVisible) return current;
+        // Senão, salta para o primeiro card visível do novo snap
+        const newIdx = firstVisible;
+        const prev = prevIndexRef.current;
+        if (newIdx !== prev) {
+          trackEvent('services_carousel_navigate', {
+            direction: newIdx > prev ? 'next' : 'prev',
+            from_index: prev,
+            to_index: newIdx,
+          });
+          prevIndexRef.current = newIdx;
+        }
+        return newIdx;
+      });
     };
 
-    setScrollSnaps(emblaApi.scrollSnapList());
     emblaApi.on('select', onSelect);
     emblaApi.on('reInit', onSelect);
     onSelect();
@@ -266,20 +313,43 @@ export default function Servicos({ subtitulo, imagemAna, whatsapp }: Props) {
               {/* Embla viewport */}
               <div ref={emblaRef} className="overflow-hidden">
                 <div className="flex gap-5">
-                  {SERVICES.map(({ n, id, Icon, title, body }) => (
+                  {SERVICES.map(({ n, id, Icon, title, body }, idx) => {
+                    const isActive = selectedIndex === idx;
+                    return (
                     <article
                       key={n}
+                      data-active={isActive}
                       className={cn(
                         // Card base — layout e visual Atelier × Summit
                         'premium-panel',
                         'group/card relative flex shrink-0 flex-col',
                         'rounded-[16px]',
-                        'border border-[#d8c9b8] bg-[#eee5da] p-5 lg:p-6',
-                        'transition-all duration-500 hover:-translate-y-1',
+                        'bg-[#eee5da] p-5 lg:p-6',
+                        'border transition-all duration-500',
                         // Mobile: 85% → 1 card + peek; sm+: 2 cards visíveis
                         'w-[85%] sm:w-[calc(50%_-_10px)]',
+                        // Estado padrão — hover é "posso interagir"
+                        !isActive && 'border-[#d8c9b8] hover:-translate-y-1',
+                        // Estado ATIVO (glow) — "estou selecionado"
+                        isActive && [
+                          'border-[#c19366]',
+                          '-translate-y-0.5',
+                          'shadow-[0_20px_50px_-12px_rgba(154,116,77,0.35),0_0_0_1px_rgba(154,116,77,0.25),inset_0_1px_0_rgba(255,255,255,0.7)]',
+                        ],
                       )}
                     >
+                      {/* Glow interno sutil — luz caindo no topo do card ativo */}
+                      {isActive && (
+                        <div
+                          className="pointer-events-none absolute inset-0 rounded-[16px] transition-opacity duration-500"
+                          style={{
+                            background:
+                              'radial-gradient(circle at 50% 0%, rgba(193,147,102,0.14), transparent 60%)',
+                          }}
+                          aria-hidden="true"
+                        />
+                      )}
+
                       {/* Ícone + numeração */}
                       <header className="mb-8 flex items-start justify-between">
                         <span
@@ -330,7 +400,8 @@ export default function Servicos({ subtitulo, imagemAna, whatsapp }: Props) {
                         {body}
                       </p>
                     </article>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
@@ -343,20 +414,13 @@ export default function Servicos({ subtitulo, imagemAna, whatsapp }: Props) {
                   role="tablist"
                   aria-label="Navegação de serviços"
                 >
-                  {scrollSnaps.map((_, i) => (
+                  {SERVICES.map((_, i) => (
                     <button
                       key={i}
                       role="tab"
                       aria-selected={selectedIndex === i}
                       aria-label={`Ir para serviço ${i + 1} de ${SERVICES.length}`}
-                      onClick={() => {
-                        trackEvent('services_carousel_navigate', {
-                          direction: 'dot',
-                          from_index: selectedIndex,
-                          to_index: i,
-                        });
-                        scrollTo(i);
-                      }}
+                      onClick={() => scrollTo(i)}
                       className={cn(
                         'h-1.5 rounded-full transition-all duration-300',
                         selectedIndex === i
@@ -380,14 +444,7 @@ export default function Servicos({ subtitulo, imagemAna, whatsapp }: Props) {
                   </span>
 
                   <button
-                    onClick={() => {
-                      trackEvent('services_carousel_navigate', {
-                        direction: 'prev',
-                        from_index: selectedIndex,
-                        to_index: Math.max(0, selectedIndex - 1),
-                      });
-                      scrollPrev();
-                    }}
+                    onClick={scrollPrev}
                     disabled={!canScrollPrev}
                     aria-label="Serviço anterior"
                     className={cn(
@@ -406,14 +463,7 @@ export default function Servicos({ subtitulo, imagemAna, whatsapp }: Props) {
                   </button>
 
                   <button
-                    onClick={() => {
-                      trackEvent('services_carousel_navigate', {
-                        direction: 'next',
-                        from_index: selectedIndex,
-                        to_index: Math.min(SERVICES.length - 1, selectedIndex + 1),
-                      });
-                      scrollNext();
-                    }}
+                    onClick={scrollNext}
                     disabled={!canScrollNext}
                     aria-label="Próximo serviço"
                     className={cn(
@@ -435,7 +485,7 @@ export default function Servicos({ subtitulo, imagemAna, whatsapp }: Props) {
             </div>
           </div>
 
-          {/* ══ COLUNA DIREITA — Foto editorial da Ana ══ */}
+          {/* ══ COLUNA DIREITA — Foto dinâmica por serviço ══ */}
           <div className="order-1 lg:order-2 reveal-on-scroll delay-300 w-full mx-auto lg:mx-0">
             <div
               className="relative w-full overflow-hidden aspect-[4/5] lg:aspect-auto lg:h-[640px] xl:h-[720px]"
@@ -446,18 +496,27 @@ export default function Servicos({ subtitulo, imagemAna, whatsapp }: Props) {
                 boxShadow: '0 34px 90px rgba(71,56,42,0.17)',
               }}
             >
-              <Image
-                src={imagemAna ?? '/img/9.png'}
-                alt="Ana Laura Noronha — engenheira civil e projetista em seu atelier"
-                fill
-                quality={90}
-                sizes="(max-width: 768px) 90vw, (max-width: 1024px) 50vw, 38vw"
-                className="object-cover object-center"
-              />
+              {/* Todas as 6 imagens empilhadas — crossfade por opacity conforme selectedIndex */}
+              {SERVICES.map((service, idx) => (
+                <Image
+                  key={service.id}
+                  src={service.image}
+                  alt={`Ilustração — ${service.title}`}
+                  fill
+                  quality={90}
+                  sizes="(max-width: 768px) 90vw, (max-width: 1024px) 50vw, 38vw"
+                  priority={idx === 0}
+                  className={cn(
+                    'object-cover object-center transition-opacity duration-[600ms] ease-out',
+                    selectedIndex === idx ? 'opacity-100' : 'opacity-0',
+                  )}
+                  aria-hidden={selectedIndex !== idx}
+                />
+              ))}
 
-              {/* Overlay gradiente inferior */}
+              {/* Overlay gradiente inferior — permanece por cima de todas */}
               <div
-                className="absolute inset-x-0 bottom-0 h-40 pointer-events-none"
+                className="absolute inset-x-0 bottom-0 h-40 pointer-events-none z-10"
                 style={{
                   background:
                     'linear-gradient(to top, rgba(33,25,19,0.30), rgba(33,25,19,0.08) 50%, transparent)',

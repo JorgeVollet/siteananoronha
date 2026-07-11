@@ -3,6 +3,7 @@
 // WhatsApp do CTA: /admin/footer → WhatsApp
 
 import { getSectionContent } from '@/lib/site-content';
+import { siteConfig } from '@/lib/site-config';
 import { HeroClient } from './HeroClient';
 
 export async function HeroSection() {
@@ -19,8 +20,8 @@ export async function HeroSection() {
         'Engenharia, arquitetura e marcenaria sob medida — um método integrado, do conceito à entrega.'
       }
       imagemPrincipal={hero.imagem_principal ?? '/img/1.png'}
-      ctaTexto={hero.cta_texto ?? 'Solicitar Orçamento'}
-      whatsapp={footer.whatsapp ?? '5555999942637'}
+      ctaTexto={hero.cta_texto ?? siteConfig.hero.cta}
+      whatsapp={footer.whatsapp ?? siteConfig.contact.phoneRaw}
     />
   );
 }

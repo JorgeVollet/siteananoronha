@@ -51,39 +51,41 @@ export default function FilosofiaManifesto({ tituloSecao, corpo, imagemUrl }: Pr
               <span className="h-px w-12 block bg-[#9f7851]" />
             </div>
 
-            {/* Headline */}
-            <h2
-              className="reveal-on-scroll"
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontWeight: 400,
-                fontSize: 'clamp(48px, 6vw, 100px)',
-                lineHeight: 0.9,
-                letterSpacing: '-0.078em',
-                color: '#151310',
-              }}
-            >
-              Projetos não fracassam
-              <br />
-              por falta de{' '}
-              <span style={{ color: 'var(--color-primary)' }}>criatividade.</span>
-            </h2>
-
-            {/* Subheadline italic */}
+            {/* Setup — em segundo plano, texto menor e discreto */}
             <p
-              className="reveal-on-scroll delay-150 mt-4"
+              className="reveal-on-scroll"
               style={{
                 fontFamily: 'var(--font-display)',
                 fontStyle: 'italic',
                 fontWeight: 400,
-                fontSize: 'clamp(22px, 2.6vw, 36px)',
-                lineHeight: 1.05,
-                letterSpacing: '-0.045em',
-                color: '#3a332d',
+                fontSize: 'clamp(20px, 2.2vw, 32px)',
+                lineHeight: 1.2,
+                letterSpacing: '-0.025em',
+                color: '#756b60',
+                marginBottom: '14px',
               }}
             >
-              Fracassam por falta de método.
+              Projetos não fracassam por falta de criatividade —
             </p>
+
+            {/* Punchline — o verdadeiro protagonista, fluindo natural */}
+            <h2
+              className="reveal-on-scroll delay-150"
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontWeight: 400,
+                fontSize: 'clamp(44px, 5.4vw, 88px)',
+                lineHeight: 0.95,
+                letterSpacing: '-0.06em',
+                color: '#151310',
+              }}
+            >
+              <span style={{ color: 'var(--color-primary)' }}>Fracassam</span>{' '}
+              por{' '}
+              <span style={{ color: 'var(--color-primary)' }}>falta</span>{' '}
+              de{' '}
+              <span style={{ color: 'var(--color-primary)' }}>método.</span>
+            </h2>
 
             {/* Divisor */}
             <div className="reveal-on-scroll delay-300 my-7 h-px w-16 bg-[#d8c9b8]" />
