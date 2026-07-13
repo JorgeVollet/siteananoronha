@@ -108,11 +108,11 @@ export function SiteHeader() {
             <Image
               src="/logotipo-an.png"
               alt="Ana Laura Noronha — Engenharia e Interiores"
-              width={160}
-              height={54}
+              width={200}
+              height={66}
               priority
               style={{
-                height: '54px',
+                height: '66px',
                 width: 'auto',
                 objectFit: 'contain',
               }}

@@ -28,7 +28,7 @@ export const SKETCH_STEPS: SketchStep[] = [
     intro:
       'Se você já tentou reformar ou começar um projeto e sentiu que "não sabia nem por onde começar", saiba que essa sensação é o começo mais comum de qualquer obra — e também o momento mais decisivo.',
     body: [
-      'Existe uma etapa antes do desenho, antes do orçamento, antes de qualquer decisão estética: é a conversa em que a gente sentar juntos e desenhar as suas vontades, seus receios, suas rotinas e o seu orçamento real. Sem essa etapa, o resto vira palpite disfarçado de projeto.',
+      'Existe uma etapa antes do desenho, antes do orçamento, antes de qualquer decisão estética: é a conversa em que a gente senta junto e desenha suas vontades, seus receios, suas rotinas e o seu orçamento real. Sem essa etapa, o resto vira palpite disfarçado de projeto.',
       'Eu chamo essa etapa de Briefing porque tem nome técnico, mas na prática é o momento em que você fala mais e eu escuto mais. Você conta o que te incomoda hoje. Descreve como quer se sentir na casa nova. Aponta os detalhes que te tiram do sério em outros lugares. E é a partir daí — do que você vive de verdade — que o projeto começa a existir.',
       'Se você chegou aqui pensando "eu quero mudar minha casa mas não sei nem explicar direito o que quero" — está no lugar certo. Meu papel na primeira conversa é te ajudar a organizar essas ideias, não já jogar solução na sua mesa.',
     ],

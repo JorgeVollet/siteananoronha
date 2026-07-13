@@ -163,6 +163,55 @@ export default function AntesDepoisClient({ engenharia, marcenaria }: Props) {
               </p>
             </div>
           </div>
+        ) : filtered.length === 0 ? (
+          /* ── ESTADO VAZIO POR CATEGORIA — centralizado ── */
+          <div className="flex justify-center py-8 lg:py-16">
+            <div
+              className="max-w-md w-full rounded-[20px] border border-[#d8c9b8] p-10 text-center"
+              style={{ background: '#f4ede2' }}
+            >
+              <div className="mb-5 flex items-center justify-center gap-3">
+                <span className="h-px w-8 block bg-[#9a744d]" />
+                <span
+                  className="text-[0.78rem] font-bold tracking-[0.09em] uppercase"
+                  style={{ fontFamily: 'var(--font-body)', color: '#9a744d' }}
+                >
+                  Em breve
+                </span>
+                <span className="h-px w-8 block bg-[#9a744d]" />
+              </div>
+              <p
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 400,
+                  fontSize: 'clamp(22px, 2.2vw, 32px)',
+                  lineHeight: 1.1,
+                  letterSpacing: '-0.04em',
+                  color: '#171411',
+                }}
+              >
+                Novos projetos de{' '}
+                <em style={{ color: 'var(--color-primary)', fontStyle: 'italic' }}>
+                  {activeCategory === 'engenharia' ? 'engenharia' : 'marcenaria'}
+                </em>{' '}
+                em breve.
+              </p>
+              <p
+                className="mt-4"
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontStyle: 'italic',
+                  fontWeight: 400,
+                  fontSize: '1rem',
+                  lineHeight: 1.5,
+                  color: '#5a5047',
+                }}
+              >
+                Enquanto isso, dá pra conferir os projetos de{' '}
+                {activeCategory === 'engenharia' ? 'marcenaria' : 'engenharia'} no botão acima.
+              </p>
+            </div>
+          </div>
         ) : (
           /* ── SPLIT EDITORIAL ── */
           <div className="grid grid-cols-1 lg:grid-cols-[1.45fr_0.85fr] gap-8 lg:gap-12 items-start">
@@ -245,20 +294,8 @@ export default function AntesDepoisClient({ engenharia, marcenaria }: Props) {
                 )}
               </div>
 
-              {filtered.length === 0 ? (
-                <div className="rounded-[14px] border border-[#e3d6c6] bg-[#f4ede2] p-6 text-center">
-                  <p
-                    className="text-[0.88rem]"
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontStyle: 'italic',
-                      color: '#756b60',
-                    }}
-                  >
-                    Em breve novos projetos nesta categoria.
-                  </p>
-                </div>
-              ) : (
+              {/* Empty state por categoria agora é tratado antes do grid — este ramo nunca é alcançado */}
+              {filtered.length > 0 && (
                 <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 snap-x snap-mandatory lg:flex-col lg:overflow-visible lg:pb-0 lg:snap-none">
                   {filtered.map((p) => {
                     const isActive = p.id === selected?.id;
