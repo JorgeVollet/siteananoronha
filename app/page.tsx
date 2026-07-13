@@ -4,6 +4,7 @@ import { SobreSection } from '@/components/sections/SobreSection';
 import { PilaresSection } from '@/components/sections/PilaresSection';
 import { PassosSection } from '@/components/sections/PassosSection';
 import { BlogPreviewSection } from '@/components/sections/BlogPreviewSection';
+import { SketchIdeiasSection } from '@/components/sections/SketchIdeiasSection';
 import FilosofiaManifesto from '@/components/FilosofiaManifesto';
 import Servicos from '@/components/Servicos';
 import AntesDepois from '@/components/AntesDepois';
@@ -44,6 +45,9 @@ export default async function HomePage() {
         imagemAna={servicos.imagem_ana || undefined}
         whatsapp={footer.whatsapp || undefined}
       />
+
+      {/* Sketch de Ideias — id="sketch" (processo criativo, mural editorial) */}
+      <SketchIdeiasSection />
 
       {/* Passo a Passo — id="passos" */}
       <PassosSection />

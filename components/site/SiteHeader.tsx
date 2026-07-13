@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 import { Menu, X, ArrowRight } from 'lucide-react';
 import {
   ContentDropdown,
@@ -94,18 +95,28 @@ export function SiteHeader() {
           {/* Logo — sempre volta pra / */}
           <a
             href="/"
+            aria-label="Ana Laura Noronha — Engenharia e Interiores"
             style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '28px',
-              lineHeight: 1,
-              letterSpacing: '-0.05em',
-              fontWeight: 400,
-              color: scrolled ? '#171411' : '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
               textDecoration: 'none',
-              transition: 'color 0.3s',
+              // No topo da home (não scrolled + fundo escuro), inverte pra branco
+              filter: scrolled ? 'none' : 'brightness(0) invert(1)',
+              transition: 'filter 0.3s',
             }}
           >
-            AN
+            <Image
+              src="/logotipo-an.png"
+              alt="Ana Laura Noronha — Engenharia e Interiores"
+              width={160}
+              height={54}
+              priority
+              style={{
+                height: '54px',
+                width: 'auto',
+                objectFit: 'contain',
+              }}
+            />
           </a>
 
           {/* Desktop nav */}

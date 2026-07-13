@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Playfair_Display, Plus_Jakarta_Sans, Cormorant_Garamond, Newsreader, Manrope } from 'next/font/google';
+import { Playfair_Display, Plus_Jakarta_Sans, Cormorant_Garamond, Newsreader, Manrope, Caveat } from 'next/font/google';
 import './globals.css';
 import SmoothScroll from '@/components/SmoothScroll';
 import { Analytics } from '@vercel/analytics/react';
@@ -47,6 +47,13 @@ const manrope = Manrope({
   display: 'swap'
 });
 
+const caveat = Caveat({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-handwriting',
+  display: 'swap'
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.ananoronha.eng'),
   title: 'Ana Laura Noronha — Engenharia e Interiores',
@@ -81,7 +88,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="pt-BR"
-      className={`${playfair.variable} ${jakarta.variable} ${cormorant.variable} ${newsreader.variable} ${manrope.variable}`}
+      className={`${playfair.variable} ${jakarta.variable} ${cormorant.variable} ${newsreader.variable} ${manrope.variable} ${caveat.variable}`}
     >
       <body className="bg-bg-nude text-text-dark font-sans antialiased">
         <PersonJsonLd />
