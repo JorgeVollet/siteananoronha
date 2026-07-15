@@ -15,6 +15,10 @@ export type SketchStep = {
   quote: string; // aspa/blockquote curto
   ctaLabel: string; // texto do botão CTA
   ctaMessage: string; // mensagem WhatsApp
+  secondaryCta?: {
+    label: string;
+    href: string;
+  };
 };
 
 export const SKETCH_STEPS: SketchStep[] = [
@@ -57,6 +61,10 @@ export const SKETCH_STEPS: SketchStep[] = [
     ctaLabel: 'Começar meu moodboard',
     ctaMessage:
       'Olá Ana, gostaria de começar um moodboard para meu projeto — tenho algumas referências, mas preciso organizar as ideias.',
+    secondaryCta: {
+      label: 'Criar meu moodboard com nossa ferramenta →',
+      href: '/moodboard/criar',
+    },
   },
   {
     slug: 'materiais',

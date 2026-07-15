@@ -230,16 +230,28 @@ export default async function SketchStepPage({
             Se algo aqui fez sentido pra você, posso te ajudar a organizar isso
             na prática — sem compromisso na primeira conversa.
           </p>
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 rounded-[12px] bg-[#171614] px-7 py-4 text-[0.9rem] font-bold tracking-[-0.01em] text-white transition-all hover:-translate-y-0.5 hover:bg-[#29231f]"
-            style={{ fontFamily: 'var(--font-body)' }}
-          >
-            {step.ctaLabel}
-            <ArrowUpRight className="h-4 w-4" strokeWidth={2} />
-          </a>
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 rounded-[12px] bg-[#171614] px-7 py-4 text-[0.9rem] font-bold tracking-[-0.01em] text-white transition-all hover:-translate-y-0.5 hover:bg-[#29231f]"
+              style={{ fontFamily: 'var(--font-body)' }}
+            >
+              {step.ctaLabel}
+              <ArrowUpRight className="h-4 w-4" strokeWidth={2} />
+            </a>
+
+            {step.secondaryCta && (
+              <Link
+                href={step.secondaryCta.href}
+                className="inline-flex items-center gap-3 rounded-[12px] border border-[#9a744d] bg-transparent px-7 py-4 text-[0.9rem] font-bold tracking-[-0.01em] text-[#9a744d] transition-all hover:-translate-y-0.5 hover:bg-[#9a744d] hover:text-white"
+                style={{ fontFamily: 'var(--font-body)' }}
+              >
+                {step.secondaryCta.label}
+              </Link>
+            )}
+          </div>
         </div>
 
         {/* Navegação anterior/próximo */}
