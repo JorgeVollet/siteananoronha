@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRight, ArrowDown } from 'lucide-react';
+import { ArrowRight, ArrowDown, BookOpen } from 'lucide-react';
 import { trackCtaClick } from '@/lib/track-cta';
 
 type Props = {
@@ -82,15 +82,17 @@ export function HeroClient({
           />
         </div>
 
-        {/* Content — bottom-left aligned */}
+        {/* Content — bottom-left aligned
+            No mobile o padding-bottom é MUITO menor pra o conteúdo aproveitar
+            o espaço superior e o título gigante ter espaço pra respirar. */}
         <div
+          className="hero-content-wrapper"
           style={{
             position: 'relative',
             zIndex: 10,
             height: '100%',
             display: 'flex',
             alignItems: 'flex-end',
-            paddingBottom: 'clamp(246px, 12vh + 150px, 310px)',
           }}
         >
           <div
@@ -103,13 +105,12 @@ export function HeroClient({
           >
             <div style={{ maxWidth: '600px' }}>
 
-              {/* H1 */}
+              {/* H1 — MUITO maior no mobile, ocupa mais espaço superior */}
               <h1
-                className="reveal-once"
+                className="reveal-once hero-title"
                 style={{
                   fontFamily: 'var(--font-display)',
                   fontWeight: 400,
-                  fontSize: 'clamp(40px,5.2vw,82px)',
                   lineHeight: 0.95,
                   letterSpacing: '-0.055em',
                   color: '#ffffff',
@@ -119,26 +120,24 @@ export function HeroClient({
                 {renderTitulo(titulo)}
               </h1>
 
-              {/* Subtítulo */}
+              {/* Subtítulo — maior no mobile */}
               <p
-                className="reveal-once"
+                className="reveal-once hero-subtitle"
                 style={{
                   fontFamily: 'var(--font-display)',
                   fontWeight: 400,
                   fontStyle: 'italic',
-                  fontSize: 'clamp(17px,1.7vw,24px)',
                   lineHeight: 1.35,
                   color: 'rgba(255,255,255,0.82)',
-                  marginTop: '24px',
                   maxWidth: '560px',
                 }}
               >
                 {subtitulo}
               </p>
 
-              {/* CTAs */}
+              {/* CTAs — centralizados no mobile, alinhados esquerda no desktop */}
               <div
-                className="reveal-once"
+                className="reveal-once hero-ctas"
                 style={{
                   marginTop: '40px',
                   display: 'flex',
@@ -182,6 +181,45 @@ export function HeroClient({
                 >
                   <span>{ctaTexto}</span>
                   <ArrowRight size={16} />
+                </a>
+
+                {/* CTA Conteúdo — entre Solicitar Orçamento e Ver Portfólio.
+                    Estilo intermediário: outline mais sutil que o Ver Portfólio. */}
+                <a
+                  href="/blog"
+                  className="hero-cta-content"
+                  style={{
+                    display: 'flex',
+                    height: '58px',
+                    alignItems: 'center',
+                    gap: '12px',
+                    borderRadius: '12px',
+                    background: 'rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(255,255,255,0.22)',
+                    padding: '0 28px',
+                    fontSize: '0.95rem',
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 700,
+                    letterSpacing: '-0.01em',
+                    color: '#ffffff',
+                    textDecoration: 'none',
+                    backdropFilter: 'blur(12px)',
+                    WebkitBackdropFilter: 'blur(12px)',
+                    transition: 'transform 0.3s cubic-bezier(0.22,1,0.36,1), background 0.3s, border-color 0.3s',
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
+                    (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.14)';
+                    (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.40)';
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
+                    (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.06)';
+                    (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.22)';
+                  }}
+                >
+                  <BookOpen size={16} />
+                  <span>Conteúdo</span>
                 </a>
 
                 {/* CTA secundário — glassmorphism */}
@@ -276,6 +314,54 @@ export function HeroClient({
           </div>
         </div>
       </section>
+
+      <style jsx>{`
+        /* Padding bottom + font sizes por breakpoint */
+        :global(.hero-content-wrapper) {
+          padding-bottom: clamp(180px, 8vh + 100px, 240px);
+        }
+        :global(.hero-title) {
+          font-size: clamp(56px, 12vw, 82px);
+          margin-top: 0;
+        }
+        :global(.hero-subtitle) {
+          font-size: clamp(20px, 4.6vw, 24px);
+          margin-top: 20px;
+        }
+        /* Mobile: CTAs centralizados */
+        :global(.hero-ctas) {
+          justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+          :global(.hero-content-wrapper) {
+            padding-bottom: clamp(220px, 10vh + 120px, 280px);
+          }
+          :global(.hero-title) {
+            font-size: clamp(60px, 7vw, 82px);
+          }
+          :global(.hero-subtitle) {
+            font-size: clamp(19px, 2.3vw, 24px);
+            margin-top: 24px;
+          }
+          /* Desktop: CTAs voltam pra alinhado à esquerda */
+          :global(.hero-ctas) {
+            justify-content: flex-start;
+          }
+        }
+
+        @media (min-width: 1024px) {
+          :global(.hero-content-wrapper) {
+            padding-bottom: clamp(246px, 12vh + 150px, 310px);
+          }
+          :global(.hero-title) {
+            font-size: clamp(64px, 5.2vw, 82px);
+          }
+          :global(.hero-subtitle) {
+            font-size: clamp(17px, 1.7vw, 24px);
+          }
+        }
+      `}</style>
     </>
   );
 }

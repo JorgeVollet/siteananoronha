@@ -33,7 +33,7 @@
     "colorthief": "^3.4.0",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^11.3.8",
-    "gsap": "^3.12.5",
+    "gsap": "^3.15.0",
     "lenis": "^1.1.6",
     "lucide-react": "^0.408.0",
     "nanoid": "^6.0.0",

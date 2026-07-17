@@ -154,11 +154,13 @@ export function SketchIdeiasSection() {
       </div>
       {/* ↑ Fim do wrapper do HEADER (limitado a 1360px) */}
 
-      {/* ══ BLOCO DA FOTO EM FULL-BLEED — borda a borda da viewport ══ */}
+      {/* ══ BLOCO DA FOTO EM FULL-BLEED — borda a borda da viewport ══
+          Aspect ratio responsivo: no mobile a foto fica MAIS ALTA (4:5)
+          pra os post-its ficarem visíveis com detalhe. No desktop mantém
+          16:9 pra visual widescreen editorial. */}
       <div
-        className="reveal-on-scroll delay-150 relative w-full"
+        className="reveal-on-scroll delay-150 sketch-photo-block relative w-full"
         style={{
-          aspectRatio: '16 / 9',
           overflow: 'hidden',
           boxShadow: '0 40px 100px rgba(23,20,17,0.22)',
         }}
@@ -178,13 +180,31 @@ export function SketchIdeiasSection() {
             }}
           />
 
-          {/* Hotspots clicáveis — brilho dourado suave sobre o post-it no hover */}
+          <style jsx>{`
+            .sketch-photo-block {
+              aspect-ratio: 4 / 5; /* mobile: mais alto pra dar zoom nos post-its */
+            }
+            @media (min-width: 768px) {
+              .sketch-photo-block {
+                aspect-ratio: 16 / 10; /* tablet: um pouco mais alto que 16:9 */
+              }
+            }
+            @media (min-width: 1024px) {
+              .sketch-photo-block {
+                aspect-ratio: 16 / 9; /* desktop: widescreen editorial */
+              }
+            }
+          `}</style>
+
+          {/* Hotspots clicáveis — DESKTOP APENAS.
+              No mobile mostra chips embaixo (melhor UX pra tela pequena e
+              o aspect ratio muda, desalinhando as posições). */}
           {HOTSPOTS.map((h) => (
             <Link
               key={h.id}
               href={h.href}
               aria-label={`${h.label} — ${h.sublabel}`}
-              className="group absolute cursor-pointer"
+              className="group absolute cursor-pointer hidden md:block"
               style={{
                 left: `${h.left}%`,
                 top: `${h.top}%`,
@@ -221,12 +241,50 @@ export function SketchIdeiasSection() {
 
       {/* Wrapper da LEGENDA — limitado ao container do site */}
       <div className="mx-auto max-w-[1360px] px-6 sm:px-8 lg:px-12">
+        {/* Chips de navegação — MOBILE APENAS
+            (substitui os hotspots que não funcionariam com o aspect ratio novo) */}
+        <div className="reveal-on-scroll delay-200 mt-6 md:hidden">
+          <div className="grid grid-cols-2 gap-2.5">
+            {HOTSPOTS.map((h) => (
+              <Link
+                key={h.id}
+                href={h.href}
+                className="flex flex-col items-start rounded-xl border border-[#d8c9b8] bg-[#fdfcfa] px-4 py-3 transition-all active:scale-95"
+                style={{
+                  boxShadow: '0 2px 6px rgba(23,20,17,0.06)',
+                }}
+              >
+                <span
+                  className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[#9a744d]"
+                  style={{ fontFamily: 'var(--font-body)' }}
+                >
+                  {h.sublabel}
+                </span>
+                <span
+                  className="mt-1 text-[1rem] font-serif italic text-[#171411]"
+                  style={{
+                    fontFamily: 'var(--font-handwriting)',
+                    fontWeight: 600,
+                    fontSize: '1.25rem',
+                    lineHeight: 1.1,
+                  }}
+                >
+                  {h.label}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
         {/* Legenda pequena embaixo — assinatura editorial */}
         <p
           className="reveal-on-scroll delay-300 mt-8 text-center text-[0.75rem] uppercase tracking-[0.14em] text-[#756b60]"
           style={{ fontFamily: 'var(--font-body)' }}
         >
-          — Do caderno do atelier · Passe o mouse nos post-its para navegar
+          <span className="hidden md:inline">
+            — Do caderno do atelier · Passe o mouse nos post-its para navegar
+          </span>
+          <span className="md:hidden">— Do caderno do atelier</span>
         </p>
       </div>
     </section>

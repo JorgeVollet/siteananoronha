@@ -3,27 +3,25 @@
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { Menu, X, ArrowRight } from 'lucide-react';
-import {
-  ContentDropdown,
-  MobileContentAccordion,
-} from '@/components/navigation/ContentDropdown';
+import { ContentDropdown } from '@/components/navigation/ContentDropdown';
 import { siteConfig } from '@/lib/site-config';
+import { useMenu } from '@/contexts/MenuContext';
 
-const menuItems = [
-  { label: 'Manifesto', href: '#manifesto' },
-  { label: 'Sobre', href: '#sobre' },
-  { label: 'Pilares', href: '#pilares' },
-  { label: 'Serviços', href: '#servicos' },
-  { label: 'Passo a Passo', href: '#passos', hideAtLg: true },
-  { label: 'Portfólio', href: '#portfolio' },
-  { label: 'Contato', href: '#contato' },
-];
+/**
+ * Header global reformado (v2):
+ *
+ * [Logo AN]  ...  [Conteúdo ▾]  [MENU]  [Solicitar Orçamento]
+ *
+ * - Logo à esquerda
+ * - Botão MENU no centro-direita → abre o OffCanvasMenu
+ * - Dropdown "Conteúdo" (Blog/Normas/Curiosidades/Sketch) fica no header (não escondido)
+ * - Botão "Solicitar Orçamento" (CTA) permanece
+ * - Menu horizontal (Manifesto/Sobre/Pilares/Serviços/etc) foi movido pro OffCanvasMenu
+ *
+ * mix-blend-mode: difference garante que o header fique legível sobre qualquer
+ * fundo (inclusive quando o menu abre com o bege papel).
+ */
 
-// Fonte única de contato: lib/site-config.ts (siteConfig.contact.phoneRaw).
-// O header é global e renderiza em rotas estáticas (SSG), então não lê o valor
-// dinâmico do /admin/footer (isso forçaria toda página a virar dinâmica).
-// O número/CTA canônicos ficam no siteConfig — Hero e Footer usam o mesmo default.
 const WHATSAPP_FALLBACK = siteConfig.contact.phoneRaw;
 const CTA_TEXTO = siteConfig.hero.cta;
 
@@ -31,14 +29,8 @@ export function SiteHeader() {
   const pathname = usePathname();
   const isHome = pathname === '/';
   const [scrolled, setScrolled] = useState(!isHome);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isOpen, toggle } = useMenu();
 
-  // Fechar drawer ao trocar de rota
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [pathname]);
-
-  // Scroll listener só na home; nas outras rotas fica scrolled=true fixo
   useEffect(() => {
     if (!isHome) {
       setScrolled(true);
@@ -50,8 +42,6 @@ export function SiteHeader() {
     return () => window.removeEventListener('scroll', onScroll);
   }, [isHome]);
 
-  const buildLink = (anchor: string) => (isHome ? anchor : `/${anchor}`);
-
   const message = encodeURIComponent(
     'Olá Ana, gostaria de solicitar um orçamento para meu projeto.',
   );
@@ -60,258 +50,208 @@ export function SiteHeader() {
   const shouldHideAdmin = pathname?.startsWith('/admin');
   if (shouldHideAdmin) return null;
 
+  // Quando o menu offcanvas está aberto, força o header em modo "sobre bege"
+  // (texto escuro) — porque o menu tem fundo bege.
+  const effectiveScrolled = scrolled || isOpen;
+
   return (
-    <>
-      <header
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 50,
-          height: '72px',
-          display: 'flex',
-          alignItems: 'center',
-          transition: 'background 0.4s ease-out, border-color 0.4s ease-out',
-          background: scrolled ? 'rgba(245,240,233,0.92)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(12px)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'blur(12px)' : 'none',
-          borderBottom: scrolled
+    <header
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 50, // Acima do OffCanvasMenu (z40)
+        height: '72px',
+        display: 'flex',
+        alignItems: 'center',
+        transition: 'background 0.4s ease-out, border-color 0.4s ease-out',
+        // Quando menu aberto, header fica transparente (menu tem seu próprio bg)
+        background:
+          isOpen
+            ? 'transparent'
+            : effectiveScrolled
+              ? 'rgba(245,240,233,0.92)'
+              : 'transparent',
+        backdropFilter: !isOpen && effectiveScrolled ? 'blur(12px)' : 'none',
+        WebkitBackdropFilter: !isOpen && effectiveScrolled ? 'blur(12px)' : 'none',
+        borderBottom:
+          !isOpen && effectiveScrolled
             ? '1px solid #e0d4c2'
             : '1px solid transparent',
+      }}
+    >
+      <div
+        style={{
+          width: '100%',
+          maxWidth: '1510px',
+          margin: '0 auto',
+          padding: '0 24px',
+          position: 'relative', // pra permitir o botão center absoluto
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '16px',
         }}
       >
-        <div
+        {/* Logo */}
+        <a
+          href="/"
+          aria-label="Ana Laura Noronha — Engenharia e Interiores"
           style={{
-            width: '100%',
-            maxWidth: '1510px',
-            margin: '0 auto',
-            padding: '0 24px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            textDecoration: 'none',
+            flexShrink: 0,
+            filter: effectiveScrolled ? 'none' : 'brightness(0) invert(1)',
+            transition: 'filter 0.3s',
           }}
         >
-          {/* Logo — sempre volta pra / */}
-          <a
-            href="/"
-            aria-label="Ana Laura Noronha — Engenharia e Interiores"
+          <Image
+            src="/logotipo-an.png"
+            alt="Ana Laura Noronha — Engenharia e Interiores"
+            width={200}
+            height={66}
+            priority
+            style={{ height: '66px', width: 'auto', objectFit: 'contain' }}
+          />
+        </a>
+
+        {/* Botão MENU — centralizado ABSOLUTO no meio do header
+            (position absolute pra não interferir com logo/dropdown/cta) */}
+        <div
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 2,
+          }}
+        >
+          <button
+            onClick={toggle}
+            aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
+            aria-expanded={isOpen}
             style={{
+              position: 'relative',
+              padding: '0.6rem 1.2rem',
+              background: 'transparent',
+              border: `1px solid ${
+                effectiveScrolled ? '#3a332d' : 'rgba(255,255,255,0.6)'
+              }`,
+              borderRadius: '999px',
+              cursor: 'pointer',
+              color: effectiveScrolled ? '#3a332d' : '#ffffff',
+              fontFamily: 'var(--font-body)',
+              fontWeight: 700,
+              fontSize: '0.82rem',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              transition: 'all 0.3s',
               display: 'flex',
               alignItems: 'center',
-              textDecoration: 'none',
-              // No topo da home (não scrolled + fundo escuro), inverte pra branco
-              filter: scrolled ? 'none' : 'brightness(0) invert(1)',
-              transition: 'filter 0.3s',
+              gap: '10px',
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.background = effectiveScrolled
+                ? '#171614'
+                : 'rgba(255,255,255,0.15)';
+              (e.currentTarget as HTMLElement).style.color = '#ffffff';
+              (e.currentTarget as HTMLElement).style.borderColor = effectiveScrolled
+                ? '#171614'
+                : 'rgba(255,255,255,0.8)';
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.background = 'transparent';
+              (e.currentTarget as HTMLElement).style.color = effectiveScrolled
+                ? '#3a332d'
+                : '#ffffff';
+              (e.currentTarget as HTMLElement).style.borderColor = effectiveScrolled
+                ? '#3a332d'
+                : 'rgba(255,255,255,0.6)';
             }}
           >
-            <Image
-              src="/logotipo-an.png"
-              alt="Ana Laura Noronha — Engenharia e Interiores"
-              width={200}
-              height={66}
-              priority
+            {/* Ícone traços/x */}
+            <span
               style={{
-                height: '66px',
-                width: 'auto',
-                objectFit: 'contain',
+                display: 'inline-flex',
+                flexDirection: 'column',
+                gap: '4px',
+                width: '18px',
               }}
-            />
-          </a>
-
-          {/* Desktop nav */}
-          <nav
-            style={{ display: 'flex', alignItems: 'center', gap: '20px' }}
-            className="hidden lg:flex"
-          >
-            {menuItems.map((item) => {
-              if (item.label === 'Portfólio') {
-                return (
-                  <div
-                    key={item.href}
-                    style={{ display: 'flex', alignItems: 'center', gap: '20px' }}
-                  >
-                    <a
-                      href={buildLink(item.href)}
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontWeight: 700,
-                        fontSize: '0.88rem',
-                        letterSpacing: '-0.01em',
-                        color: scrolled ? '#3a332d' : 'rgba(255,255,255,0.90)',
-                        textDecoration: 'none',
-                        transition: 'color 0.3s',
-                      }}
-                      onMouseEnter={(e) => {
-                        (e.target as HTMLElement).style.color = '#a67b4f';
-                      }}
-                      onMouseLeave={(e) => {
-                        (e.target as HTMLElement).style.color = scrolled
-                          ? '#3a332d'
-                          : 'rgba(255,255,255,0.90)';
-                      }}
-                    >
-                      {item.label}
-                    </a>
-                    <ContentDropdown scrolled={scrolled} />
-                  </div>
-                );
-              }
-              return (
-                <a
-                  key={item.href}
-                  href={buildLink(item.href)}
-                  className={item.hideAtLg ? 'hidden xl:inline' : undefined}
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontWeight: 700,
-                    fontSize: '0.88rem',
-                    letterSpacing: '-0.01em',
-                    color: scrolled ? '#3a332d' : 'rgba(255,255,255,0.90)',
-                    textDecoration: 'none',
-                    transition: 'color 0.3s',
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.target as HTMLElement).style.color = '#a67b4f';
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.target as HTMLElement).style.color = scrolled
-                      ? '#3a332d'
-                      : 'rgba(255,255,255,0.90)';
-                  }}
-                >
-                  {item.label}
-                </a>
-              );
-            })}
-          </nav>
-
-          {/* Right: CTA + hamburger */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden lg:flex"
-              style={{
-                height: '40px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                borderRadius: '10px',
-                padding: '0 20px',
-                fontSize: '0.82rem',
-                fontFamily: 'var(--font-body)',
-                fontWeight: 700,
-                textDecoration: 'none',
-                transition: 'all 0.3s',
-                background: scrolled ? '#171614' : 'rgba(255,255,255,0.15)',
-                color: '#ffffff',
-                border: scrolled ? 'none' : '1px solid rgba(255,255,255,0.25)',
-                backdropFilter: scrolled ? 'none' : 'blur(8px)',
-              }}
+              aria-hidden="true"
             >
-              {CTA_TEXTO}
-            </a>
-
-            <button
-              onClick={() => setIsMenuOpen((o) => !o)}
-              aria-label={isMenuOpen ? 'Fechar menu' : 'Abrir menu'}
-              className="lg:hidden"
-              style={{
-                padding: '8px',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                color: scrolled ? '#171411' : '#ffffff',
-                display: 'flex',
-                alignItems: 'center',
-                transition: 'color 0.3s',
-              }}
-            >
-              {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
-            </button>
-          </div>
+              <span
+                style={{
+                  display: 'block',
+                  height: '1.5px',
+                  background: 'currentColor',
+                  transformOrigin: 'center',
+                  transition: 'transform 0.35s ease',
+                  transform: isOpen ? 'rotate(45deg) translate(3px, 3px)' : 'none',
+                }}
+              />
+              <span
+                style={{
+                  display: 'block',
+                  height: '1.5px',
+                  background: 'currentColor',
+                  transformOrigin: 'center',
+                  transition: 'transform 0.35s ease',
+                  transform: isOpen ? 'rotate(-45deg) translate(3px, -3px)' : 'none',
+                }}
+              />
+            </span>
+            {isOpen ? 'Fechar' : 'Menu'}
+          </button>
         </div>
-      </header>
 
-      {/* Mobile drawer */}
-      <div
-        className="lg:hidden"
-        style={{
-          position: 'fixed',
-          top: '72px',
-          left: 0,
-          right: 0,
-          zIndex: 40,
-          overflow: 'hidden',
-          maxHeight: isMenuOpen ? '460px' : '0',
-          opacity: isMenuOpen ? 1 : 0,
-          transition:
-            'max-height 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.25s ease',
-          background: '#f5f0e9',
-          borderBottom: '1px solid #d8c9b8',
-        }}
-      >
-        <div style={{ padding: '24px' }}>
-          <nav
-            style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
+        {/* Direita: Conteúdo dropdown + CTA Solicitar Orçamento */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '24px',
+            flexShrink: 0,
+          }}
+        >
+          {/* Dropdown Conteúdo */}
+          <div
+            className="hidden md:block"
+            style={{ opacity: isOpen ? 0 : 1, transition: 'opacity 0.3s' }}
           >
-            {menuItems.map((item) => (
-              <div key={item.href}>
-                <a
-                  href={buildLink(item.href)}
-                  onClick={() => setIsMenuOpen(false)}
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontWeight: 700,
-                    fontSize: '1rem',
-                    color: '#171411',
-                    letterSpacing: '-0.01em',
-                    textDecoration: 'none',
-                    display: 'block',
-                  }}
-                >
-                  {item.label}
-                </a>
-                {item.label === 'Portfólio' && (
-                  <div style={{ marginTop: '20px' }}>
-                    <MobileContentAccordion
-                      onNavigate={() => setIsMenuOpen(false)}
-                    />
-                  </div>
-                )}
-              </div>
-            ))}
-          </nav>
+            <ContentDropdown scrolled={effectiveScrolled} />
+          </div>
 
+          {/* CTA Solicitar Orçamento — some quando menu abre */}
           <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => setIsMenuOpen(false)}
+            className="hidden md:flex"
             style={{
-              marginTop: '24px',
-              display: 'flex',
-              height: '48px',
-              width: '100%',
+              height: '40px',
               alignItems: 'center',
-              justifyContent: 'center',
               gap: '8px',
               borderRadius: '10px',
-              background: '#171614',
-              color: '#ffffff',
+              padding: '0 20px',
+              fontSize: '0.82rem',
               fontFamily: 'var(--font-body)',
               fontWeight: 700,
-              fontSize: '0.88rem',
               textDecoration: 'none',
+              transition: 'all 0.3s',
+              background: effectiveScrolled ? '#171614' : 'rgba(255,255,255,0.15)',
+              color: '#ffffff',
+              border: effectiveScrolled ? 'none' : '1px solid rgba(255,255,255,0.25)',
+              backdropFilter: effectiveScrolled ? 'none' : 'blur(8px)',
+              opacity: isOpen ? 0 : 1,
+              pointerEvents: isOpen ? 'none' : 'auto',
             }}
           >
-            <span>{CTA_TEXTO}</span>
-            <ArrowRight size={14} />
+            {CTA_TEXTO}
           </a>
         </div>
       </div>
-    </>
+    </header>
   );
 }

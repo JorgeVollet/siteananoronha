@@ -8,6 +8,8 @@ import { Toaster } from 'sonner';
 import { PersonJsonLd } from '@/components/seo/PersonJsonLd';
 import { OrganizationJsonLd } from '@/components/seo/OrganizationJsonLd';
 import { SiteHeader } from '@/components/site/SiteHeader';
+import { MenuProvider } from '@/contexts/MenuContext';
+import { OffCanvasMenu } from '@/components/global/OffCanvasMenu';
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -93,8 +95,41 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-bg-nude text-text-dark font-sans antialiased">
         <PersonJsonLd />
         <OrganizationJsonLd />
-        <SiteHeader />
-        <SmoothScroll>{children}</SmoothScroll>
+        <MenuProvider>
+          {/*
+            OffCanvasMenu fica POR BAIXO (z:0) — quando o site encolhe,
+            revela ele. Ordem importa: menu ANTES do wrapper no DOM.
+          */}
+          <OffCanvasMenu />
+
+          {/*
+            #site-scale-wrapper — envolve o conteúdo do site. Ao abrir o menu,
+            este wrapper encolhe (scale + clip-path) revelando o menu embaixo.
+            z-index: 10 pra ficar POR CIMA do menu no estado inicial.
+            background bege garante que cubra o menu (o menu tem mesmo bg,
+            então visualmente ninguém nota).
+          */}
+          <div
+            id="site-scale-wrapper"
+            style={{
+              position: 'relative',
+              zIndex: 10,
+              transformOrigin: 'center center',
+              willChange: 'transform, clip-path',
+              minHeight: '100vh',
+              background: '#f5f0e9',
+              clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+            }}
+          >
+            <SmoothScroll>{children}</SmoothScroll>
+          </div>
+
+          {/*
+            SiteHeader fica FORA do wrapper — assim ele NÃO encolhe junto.
+            z-index: 50 (acima de tudo).
+          */}
+          <SiteHeader />
+        </MenuProvider>
         <Toaster position="bottom-right" richColors />
         <Analytics />
         <SpeedInsights />
