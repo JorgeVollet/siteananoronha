@@ -1,7 +1,8 @@
 'use client';
 
-import { ArrowRight, ArrowDown, BookOpen } from 'lucide-react';
+import { ArrowRight, ArrowDown } from 'lucide-react';
 import { trackCtaClick } from '@/lib/track-cta';
+import { HeroContentDropdown } from './HeroContentDropdown';
 
 type Props = {
   titulo: string;
@@ -82,9 +83,7 @@ export function HeroClient({
           />
         </div>
 
-        {/* Content — bottom-left aligned
-            No mobile o padding-bottom é MUITO menor pra o conteúdo aproveitar
-            o espaço superior e o título gigante ter espaço pra respirar. */}
+        {/* Content — align-items controlado pelo CSS (globals.css) */}
         <div
           className="hero-content-wrapper"
           style={{
@@ -92,7 +91,8 @@ export function HeroClient({
             zIndex: 10,
             height: '100%',
             display: 'flex',
-            alignItems: 'flex-end',
+            // align-items definido no globals.css:
+            // mobile → center | desktop >=768 → flex-end
           }}
         >
           <div
@@ -183,44 +183,8 @@ export function HeroClient({
                   <ArrowRight size={16} />
                 </a>
 
-                {/* CTA Conteúdo — entre Solicitar Orçamento e Ver Portfólio.
-                    Estilo intermediário: outline mais sutil que o Ver Portfólio. */}
-                <a
-                  href="/blog"
-                  className="hero-cta-content"
-                  style={{
-                    display: 'flex',
-                    height: '58px',
-                    alignItems: 'center',
-                    gap: '12px',
-                    borderRadius: '12px',
-                    background: 'rgba(255,255,255,0.06)',
-                    border: '1px solid rgba(255,255,255,0.22)',
-                    padding: '0 28px',
-                    fontSize: '0.95rem',
-                    fontFamily: 'var(--font-body)',
-                    fontWeight: 700,
-                    letterSpacing: '-0.01em',
-                    color: '#ffffff',
-                    textDecoration: 'none',
-                    backdropFilter: 'blur(12px)',
-                    WebkitBackdropFilter: 'blur(12px)',
-                    transition: 'transform 0.3s cubic-bezier(0.22,1,0.36,1), background 0.3s, border-color 0.3s',
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
-                    (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.14)';
-                    (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.40)';
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
-                    (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.06)';
-                    (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.22)';
-                  }}
-                >
-                  <BookOpen size={16} />
-                  <span>Conteúdo</span>
-                </a>
+                {/* CTA Conteúdo — dropdown com 4 categorias */}
+                <HeroContentDropdown />
 
                 {/* CTA secundário — glassmorphism */}
                 <a
@@ -314,54 +278,6 @@ export function HeroClient({
           </div>
         </div>
       </section>
-
-      <style jsx>{`
-        /* Padding bottom + font sizes por breakpoint */
-        :global(.hero-content-wrapper) {
-          padding-bottom: clamp(180px, 8vh + 100px, 240px);
-        }
-        :global(.hero-title) {
-          font-size: clamp(56px, 12vw, 82px);
-          margin-top: 0;
-        }
-        :global(.hero-subtitle) {
-          font-size: clamp(20px, 4.6vw, 24px);
-          margin-top: 20px;
-        }
-        /* Mobile: CTAs centralizados */
-        :global(.hero-ctas) {
-          justify-content: center;
-        }
-
-        @media (min-width: 768px) {
-          :global(.hero-content-wrapper) {
-            padding-bottom: clamp(220px, 10vh + 120px, 280px);
-          }
-          :global(.hero-title) {
-            font-size: clamp(60px, 7vw, 82px);
-          }
-          :global(.hero-subtitle) {
-            font-size: clamp(19px, 2.3vw, 24px);
-            margin-top: 24px;
-          }
-          /* Desktop: CTAs voltam pra alinhado à esquerda */
-          :global(.hero-ctas) {
-            justify-content: flex-start;
-          }
-        }
-
-        @media (min-width: 1024px) {
-          :global(.hero-content-wrapper) {
-            padding-bottom: clamp(246px, 12vh + 150px, 310px);
-          }
-          :global(.hero-title) {
-            font-size: clamp(64px, 5.2vw, 82px);
-          }
-          :global(.hero-subtitle) {
-            font-size: clamp(17px, 1.7vw, 24px);
-          }
-        }
-      `}</style>
     </>
   );
 }

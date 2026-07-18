@@ -674,3 +674,76 @@ html.lenis {
   }
 }
 
+/* ============================================================
+   HERO RESPONSIVE — controlado por breakpoint em globals.css
+   pra ter prioridade sobre inline styles do HeroClient.tsx.
+   Uso !important pra vencer inline styles residuais.
+   ============================================================ */
+
+/* MOBILE (default, < 768px) — align center + paddings equilibrados */
+.hero-content-wrapper {
+  align-items: center !important;
+  padding-top: 96px !important;   /* 72px header + folga */
+  padding-bottom: 100px !important;
+}
+.hero-title {
+  font-size: clamp(40px, 9.5vw, 52px) !important;
+  margin-top: 0 !important;
+}
+.hero-subtitle {
+  font-size: clamp(16px, 3.8vw, 19px) !important;
+  margin-top: 16px !important;
+}
+/* Mobile: CTAs centralizados + compactos */
+.hero-ctas {
+  justify-content: center !important;
+  gap: 12px !important;
+  margin-top: 32px !important;
+}
+.hero-ctas > a,
+.hero-ctas > div > button {
+  height: 48px !important;
+  padding: 0 20px !important;
+  font-size: 0.85rem !important;
+}
+
+/* TABLET (>= 768px) */
+@media (min-width: 768px) {
+  .hero-content-wrapper {
+    align-items: flex-end !important;
+    padding-top: 0 !important;
+    padding-bottom: clamp(220px, 10vh + 120px, 280px) !important;
+  }
+  .hero-title {
+    font-size: clamp(60px, 7vw, 82px) !important;
+  }
+  .hero-subtitle {
+    font-size: clamp(19px, 2.3vw, 24px) !important;
+    margin-top: 24px !important;
+  }
+  .hero-ctas {
+    justify-content: flex-start !important;
+    gap: 16px !important;
+    margin-top: 40px !important;
+  }
+  .hero-ctas > a,
+  .hero-ctas > div > button {
+    height: 58px !important;
+    padding: 0 28px !important;
+    font-size: 0.95rem !important;
+  }
+}
+
+/* DESKTOP (>= 1024px) */
+@media (min-width: 1024px) {
+  .hero-content-wrapper {
+    padding-bottom: clamp(246px, 12vh + 150px, 310px) !important;
+  }
+  .hero-title {
+    font-size: clamp(64px, 5.2vw, 82px) !important;
+  }
+  .hero-subtitle {
+    font-size: clamp(17px, 1.7vw, 24px) !important;
+  }
+}
+
